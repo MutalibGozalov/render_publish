@@ -7,4 +7,4 @@ pip install --force-reinstall -U setuptools
 python manage.py collectstatic --no-input
 python manage.py migrate
 
-python manage.py createsuperuser --username root --email mgozelov@gmail.com --no-input
+python manage.py createsuperuser --no-input
