@@ -1,0 +1,151 @@
+{% extends 'dashboard/sidebar.html' %}
+{% block title %} Dashboard {% endblock %}
+{% load tags %}
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+       <h1>Good morning, Admin</h1>
+       Nice to see you again!
+    </div>
+    <button class="btn btn-primary toggle-sidebar-btn" ><i class="bi bi-arrow-left-right"></i></button>
+    <section class="section dashboard">
+       <div class="row">
+          <div class="col-lg-6">
+             <div class="row">
+                <div class="col-md-6">
+                   <div class="card info-card revenue-card"> <!--Today-->
+                      <div class="card-body" style="font-size: 15px;">
+                         <h5 class="card-title"><span>Today</span></h5>
+                         <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-currency-dollar"></i></div>
+                            <div class="ps-3">
+                               <h6>${{sum_day}}</h6>
+                               <span id="123456" class="text-success small pt-1 fw-bold">0%</span> <span class="text-muted small pt-2 ps-1"></span>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+                <div class="col-md-6">
+                   <div class="card info-card revenue-card"> <!--Today-->
+                      <div class="card-body" style="font-size: 15px;">
+                         <h5 class="card-title"><span>This Month</span></h5>
+                         <div class="d-flex align-items-center">
+                            <div class="card-icon rounded-circle d-flex align-items-center justify-content-center"> <i class="bi bi-currency-dollar"></i></div>
+                            <div class="ps-3">
+                               <h6>${{sum_month}}</h6>
+                               <span id="1234567" class="text-success small pt-1 fw-bold">0%</span> <span class="text-muted small pt-2 ps-1"></span>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+                <div class="card"> <!-- Recent transactions-->
+                      <div class="card-body" style="font-size: 15px;">
+                        <h5 class="card-title">Recent Transactions <span>| Today</span></h5>
+                        <table class="table table-hover">
+                           <tbody style="font-size: 15px;">
+                           {% for assignment in assignments reversed %}
+                           <tr>
+                              <td>{{assignment.service}}</td>
+                              <td>{{assignment.service.time|to_hm}}</td>
+                              <td>{{assignment.created_at|date:"SHORT_DATE_FORMAT"}}</td>
+                              <td>${{assignment.tip}}</td>
+                              <td>${{assignment|outcome}}</td>
+                           </tr>
+                           {% endfor %}
+                           </tbody>
+                        </table>
+                   </div>
+                </div>
+                <div class="card"> <!-- Chart -->
+                   <div class="card-body">
+                      <h5 class="card-title">Overview <span>/Today</span></h5>
+                      <div id="reportsChart"></div>
+                      {{ sum|json_script:'sum' }}
+                      <script>document.addEventListener("DOMContentLoaded", () => {
+                         var sum = JSON.parse(document.getElementById('sum').textContent);
+                         var currentYear = new Date().getFullYear();
+                         var currentMonth = new Date().getMonth() + 1;
+
+                         var lst = [];
+                         for (let i = 7; i >= 0; i--) {
+                           dt=currentYear.toString() +"-"+ (currentMonth-i).toString();
+                           lst.push(dt)
+                         }
+                         new ApexCharts(document.querySelector("#reportsChart"), {
+                           series: [{
+                             name: 'Sales',
+                             data: sum,
+                            }, 
+                         //  {
+                         //     name: 'Revenue',
+                         //     data: [11, 32, 45, 32, 34, 52, 41]
+                         //   }, {
+                         //     name: 'Customers',
+                         //     data: [15, 11, 32, 18, 9, 24, 11]
+                         //   }
+                            ],
+                           chart: {
+                             height: 350,
+                             type: 'area',
+                             toolbar: {
+                               show: true
+                             },
+                           },
+                           markers: {
+                             size: 4
+                           },
+                           colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                           fill: {
+                             type: "gradient",
+                             gradient: {
+                               shadeIntensity: 1,
+                               opacityFrom: 0.3,
+                               opacityTo: 0.4,
+                               stops: [0, 90, 100]
+                             }
+                           },
+                           dataLabels: {
+                             enabled: true
+                           },
+                           stroke: {
+                             curve: 'smooth',
+                             width: 2
+                           },
+                           xaxis: {
+                             type: 'datetime',
+                             categories: lst,
+                           },
+                           tooltip: {
+                             x: {
+                               format: 'dd/MM/yy HH:mm'
+                             },
+                           }
+                         }).render();
+                         });
+                      </script> 
+                   </div>
+                </div>
+          </div>
+          <div class="col-lg"> <!-- Summarize -->
+            <div class="card sticky-top" style='top: 30px;'>
+               <div class="card-body">
+                  <h5 class="card-title">Summarize</h5>
+                  <div class="row align-items-center justify-content-between">
+                     {% csrf_token %} 
+                     <div class="col-5 px-0 ms-2  border text-center rounded border-primary" ><input type="date" style="height: 40px;" class="form-control" name="today" value="" min="2020-01-01" max="" /></div>
+                     <div id="day_sum" class="col-6 border text-center rounded border-primary" style="height: 40px; padding-top: 9px;">$ {{sum_day}}</div>
+                  </div>
+                  <div class="row align-items-center pt-3 justify-content-between">
+                     <div class="col-5 px-0 ms-2 border text-center rounded border-primary"><input type='month' style="height: 40px;" class="form-control" name="month" value="2022-11" min="2010-01" max="" /></div>
+                     <div id="month_sum" class="col-6 border text-center rounded border-primary" style="height: 40px; padding-top: 9px;">$ {{sum_month}}</div>
+                  </div>
+               </div>
+           </div>
+          </div>
+       </div>
+    </section>
+</main>
+{% endblock %}

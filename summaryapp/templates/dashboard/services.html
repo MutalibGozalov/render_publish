@@ -1,0 +1,121 @@
+{% extends 'dashboard/sidebar.html' %}
+{% block title %} Services {% endblock %}
+{% load tags %}
+{% block content %}
+      <main id="main" class="main">
+         <div class="pagetitle mt-3">
+            <h1>Services by Legacy Barbershop</h1>
+         </div>
+         <button class="btn btn-primary toggle-sidebar-btn" ><i class="bi bi-arrow-left-right"></i></button>
+         <div class="row">
+            <div class="col-lg-6">
+               <div class="card mt-5"> <!-- Recent transactions-->
+                  <div class="card-body">
+                     <h5 class="card-title">All Services:</h5>
+                     <table class="table table-hover">
+                        <tbody>
+                           <tr>
+                              <th>Name</th>
+                              <th>Prize</th>
+                              <th>Duration</th>
+                              <th></th>
+                              <th></th>
+                           </tr>
+                           {% for service in services %}
+                           <tr>
+                              <td>{{service.name}}</td>
+                              <td>${{service.prize}}</td>
+                              <td>{{service.time|to_hm}}</td>
+                              <td>
+                                 <button class="btn btn-primary list-edit" sid="{{service.id}}"><i class="bi bi-pen"></i></button>
+                              </td>
+                              <td>
+                                 <button class="btn btn-danger list-delete" sid="{{service.id}}"><i class="bi bi-trash"></i></button>
+                              </td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+               </div>     
+            </div>
+            <div class="col-lg mt-5">
+               <div class="row"> <!--Edit service-->
+                  <div class="card">
+                     <div class="card-body">
+                        <h5 class="card-title">Edit service</h5>
+                        {% load crispy_forms_tags %}
+                        <form method="post" id="edit-form" sid="">
+                              {% csrf_token %} 
+                              <!-- {{form|crispy}} -->
+                           <div class="row justify-content-between">
+                              <div class="col-3 py-2 center">Name:</div>
+                              <div class="col py-0 px-0 border rounded border-primary">{{form.name}}</div>
+                           </div>
+                           <div class="row pt-3">
+                              <div class="col-3 py-2">Tiem:</div>
+                              <div class="col-2 py-0 px-0 me-1 border rounded border-primary">{{form.time}}</div>
+                              <div class="col-2 py-0 px-0 me-1 border rounded border-primary"><input type="text" class="textinput textInput form-control" name="time2"></div>
+                           </div>
+                           <div class="row pt-3">
+                              <div class="col-3 py-2">Prize:</div>
+                              <div class="col-4 py-0 px-0 border rounded border-primary">{{form.prize}}</div>
+                           </div>
+                           <div class="col" style="text-align: right;">
+                              <button type="submit" class="btn btn-success"><i class="bi bi-check-circle-fill"></i></button>
+                           </div>
+                        </form>
+                     </div>
+                 </div>
+               </div>
+               <div class="row"> <!--Add service-->
+                  <div class="card">
+                     <div class="card-body">
+                        <h5 class="card-title">Add service</h5>
+                        {% load crispy_forms_tags %}
+                        <form method="post" id="add-form">
+                              {% csrf_token %} 
+                              <!-- {{form|crispy}} -->
+                           <div class="row justify-content-between">
+                              <div class="col-3 py-2 center">Name:</div>
+                              <div class="col py-0 px-0 border rounded border-primary">{{form.name}}</div>
+                           </div>
+                           <div class="row pt-3">
+                              <div class="col-3 py-2">Time:</div>
+                              <div class="col-2 py-0 px-0 me-1 border rounded border-primary">{{form.time}}</div>
+                              <div class="col-2 py-0 px-0 border rounded border-primary"><input type="text" class="textinput textInput form-control" name="time2"></div>
+                           </div>
+                           <div class="row pt-3">
+                              <div class="col-3 py-2">Prize:</div>
+                              <div class="col-4 py-0 px-0 border rounded border-primary">{{form.prize}}</div>
+                           </div>
+                           <div class="row">
+                              <div class="col" style="text-align: right;">
+                                 <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i></button>
+                              </div>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+               <div class="row"> <!--Delete service-->
+                  <div class="card">
+                     <div class="card-body">
+                        <h5 class="card-title">Delete service</h5>
+                           <form method="post" id="delete-form">
+                              <div class="row justify-content-between">
+                                 {% csrf_token %} 
+                                 <div class="col-3 py-2">Choose:</div>
+                                 <div class="col py-0 px-0 border rounded border-primary">{{form.name}}</div>
+                               </div>
+                               <div class="col" style="text-align: right;">
+                                 <button type="submit" class="btn btn-danger mt-3 pt-2"><i class="bi bi-trash"></i></button>
+                              </div>
+                           </form>
+                     </div>
+                 </div>
+               </div>
+            </div>
+         </div>
+      </main>
+{% endblock %}

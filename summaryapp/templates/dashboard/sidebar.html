@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <title>{% block title %}Sidebar base{% endblock %}</title>
+      <meta name="robots" content="noindex, nofollow">
+      <meta content="" name="description">
+      <meta content="" name="keywords">
+      <script>
+         var ms_b ='{{month_sum_before}}';
+         var ds_b ='{{day_sum_before}}';
+         var ms ='{{sum_month}}';
+         var ds ='{{sum_day}}';
+      </script>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+      
+      <link href="https://fonts.gstatic.com" rel="preconnect">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+      <link href="{% static '/css/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static '/css/bootstrap-icons.css' %}" rel="stylesheet">
+      <link href="{% static '/css/boxicons.min.css' %}" rel="stylesheet">
+      <link href="{% static '/css/quill.snow.css' %}" rel="stylesheet">
+      <link href="{% static '/css/quill.bubble.css' %}" rel="stylesheet">
+      <link href="{% static '/css/remixicon.css' %}" rel="stylesheet">
+      <link href="{% static '/css/simple-datatables.css' %}" rel="stylesheet">
+      <link href="{% static '/css/style.css' %}" rel="stylesheet">
+      
+      <style>
+         .toggle-sidebar-btn {
+            position: absolute;
+            right: 40px;
+            top: 20px;
+         }
+
+         .toogle-sidebar {
+            font-size: 85%;
+         }
+      </style>
+   </head>
+   <body>
+      <header></header>
+      <div class="container">
+         <div class="col-1">
+            <aside  class="sidebar">
+               <ul class="sidebar-nav" id="sidebar-nav">
+                  <img src="{% static '/img/logo.png' %}" style="width: 110px; height: 110px;" class="rounded mx-auto mb-3 d-block" alt="...">
+                  <li class="nav-item"> <a class="nav-link collapsed" href="dashboard"> <i class="bi bi-grid"></i> <span>Dashboard</span> </a></li>
+                  <li class="nav-item"> <a class="nav-link collapsed" href="services"> <i class="bi bi-person"></i> <span>Services</span> </a></li>
+                  <li class="nav-item"> <a class="nav-link collapsed" href="transactions"> <i class="bi bi-question-circle"></i> <span>Transactions</span> </a></li>
+                  <li class="nav-item"> <a class="nav-link collapsed" href="barbers"> <i class="bi bi-envelope"></i> <span>Barbers</span> </a></li>
+                  <li class="nav-item"> <a class="nav-link collapsed" href="/logout"> <i class="bi bi-box-arrow-in-right"></i> <span>Log Out</span> </a></li>
+               </ul>
+            </aside>
+         </div>
+      </div>
+      <div class="container-fluid" >
+        {% block content %}{% endblock %}
+      </div>
+
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>  
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+      <script src="{% static '/js/myscripts.js' %}"></script>
+      <script src="{% static '/js/apexcharts.min.js' %}"></script>
+      <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static '/js/chart.min.js' %}"></script>
+      <script src="{% static '/js/echarts.min.js' %}"></script>
+      <script src="{% static '/js/quill.min.js' %}"></script>
+      <script src="{% static '/js/simple-datatables.js' %}"></script>
+      <script src="{% static '/js/tinymce.min.js' %}"></script>
+      <script src="{% static '/js/validate.js' %}"></script>
+      <script src="{% static '/js/main.js' %}"></script>      
+
+    </body>
+    </html>

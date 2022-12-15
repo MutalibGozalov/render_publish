@@ -1,0 +1,71 @@
+{% extends 'dashboard/sidebar.html' %}
+{% block title %} Reception {% endblock %}
+{% load tags %}
+{% block content %}
+<main id="main" class="main">
+    <div class="pagetitle">
+       <h1>Good morning</h1>
+       Nice to see you again!
+    </div>    
+    <button class="btn btn-primary toggle-sidebar-btn" ><i class="bi bi-arrow-left-right"></i></button>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card"> <!-- Recent transactions-->
+                <div class="card-body" style="font-size: 15px;">
+                    <h5 class="card-title">Recent Transactions <span>| Today</span></h5>
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Service</th>
+                            <th>Time</th>
+                            <th>Added</th>
+                            <th>Tip</th>
+                            <th>Outcome</th>
+                         </tr>
+                        <tbody style="font-size: 15px;">
+                        {% for assignment in assignments reversed%}
+                        <tr>
+                            <td>{{assignment.service}}</td>
+                            <td>{{assignment.service.time|to_hm}}</td>
+                            <td>{{assignment.created_at|date:"SHORT_DATE_FORMAT"}}</td>
+                            <td>${{assignment.tip}}</td>
+                            <td>${{assignment|outcome}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+        <div class="col-lg"> <!-- Add transaction -->
+            <div class="card sticky-top" style='top: 30px;'>
+               <div class="card-body">
+                  <h5 class="card-title">Add transaction</h5>
+                  {% load crispy_forms_tags %}
+                  <div >
+                      <form method="post">
+                          {% csrf_token %} 
+                        <div class="row me-1 justify-content-between">
+                            <div class="col-3 py-2 center">Barber:</div>
+                            <div class="col py-0 px-0 border rounded border-primary">{{form.employee}}</div>
+                        </div>
+                        
+                        <div class="row me-1 my-4 justify-content-between">
+                            <div class="col-3 py-2 center">Service:</div>
+                            <div class="col py-0 px-0 border rounded border-primary">{{form.service}}</div>
+                        </div>
+
+                        <div class="row me-1 justify-content-between">
+                            <div class="col-3 py-2 center">Tip:</div>
+                            <div class="col py-0 px-0 border rounded border-primary">{{form.tip}}</div>
+                        </div>
+
+                      <div class="mt-2" style="text-align: right;">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i></button>
+                      </div>
+                      </form>
+                  </div>
+               </div>
+           </div>
+        </div>
+    </div>
+{% endblock %}

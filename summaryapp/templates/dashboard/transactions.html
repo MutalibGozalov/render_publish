@@ -1,0 +1,101 @@
+{% extends 'dashboard/sidebar.html' %}
+{% block title %} Transactions {% endblock %}
+{% load tags %}
+{% block content %}
+      <main id="main" class="main">
+         <div class="pagetitle mt-3">
+            <h1>Transactions of Legacy Barbershop</h1>
+         </div>
+         <button class="btn btn-primary toggle-sidebar-btn" ><i class="bi bi-arrow-left-right"></i></button>
+         <div class="row">
+            <div class="col-lg-6">
+               <div class="card mt-5"> <!-- Recent transactions-->
+                  <div class="card-body">
+                     <h5 class="card-title">All Transactions:</h5>
+                     <table class="table table-hover">
+                        <tr>
+                           <th>Service</th>
+                           <th>Time</th>
+                           <th>Added</th>
+                           <th>Tip</th>
+                           <th>Outcome</th>
+                        </tr>
+                        <tbody id="tr_table">
+                           {% for assignment in page.object_list %}
+                           <tr>
+                              <td>{{assignment.service}}</td>
+                              <td>{{assignment.service.time|to_hm}}</td>
+                              <td>{{assignment.created_at|date:"SHORT_DATE_FORMAT"}}</td>
+                              <td>${{assignment.tip}}</td>
+                              <td>${{assignment|outcome}}</td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                     <div class="offset-md-3">
+                        <nav aria-label="...">
+                           <ul class="pagination">
+                              {% if page.has_previous %}
+                              <li class="page-item">
+                                <a class="page-link" href="{% url 'transactions'%}?page={{page.previous_page_number}}" tabindex="-1">Previous</a>
+                              </li>
+                              <li class="page-item">
+                                <a class="page-link" href="{% url 'transactions'%}?page=1">1</a>
+                              </li>
+                              {% endif %}
+                              <li class="page-item active">
+                                <a class="page-link" href="#">{{page.number}}</a>
+                              </li>
+                              {% if page.has_next %}
+                              <li class="page-item">
+                                <a class="page-link" href="{% url 'transactions'%}?page={{page.paginator.num_pages}}">{{page.paginator.num_pages}}</a>
+                              </li>
+                              <li class="page-item">
+                                <a class="page-link" href="{% url 'transactions'%}?page={{page.next_page_number}}">Next</a>
+                              </li>
+                              {% endif %}
+                           </ul>
+                         </nav>
+                     </div>
+                  </div>
+               </div>     
+            </div>
+            <div class="col-lg mt-5">
+               <div class="row align-items-center"> <!--Filter-->
+                  <div class="card">
+                     <div class="card-body">
+                        <h5 class="card-title">Filter transactions by:</h5>
+                        <div class="row text-center text-light justify-content-between">
+                           <div class="col text-dark font-weight-bold py-1 center">Filter</div>
+                           <div id="by_service" class="col bg-primary py-1 border rounded border-primary" style="cursor: pointer;">Services</div>
+                           <div id="by_tip" class="col bg-primary py-1 mx-3 border rounded border-primary" style="cursor: pointer;">Tips</div>
+                           <div id="by_outcome" class="col bg-primary py-1 border rounded border-primary" style="cursor: pointer;">Outcome</div>
+                        </div>
+                        <div class="row text-center justify-content-start my-3">
+                           <div class="col-3 py-2">Show:</div>
+                           <div class="col-2 py-0 px-0 me-1 border rounded border-primary"><input type="text" class="textinput textInput form-control" name="from" value="0" placeholder="from:"></div>
+                           <div class="col-2 py-0 px-0 border rounded border-primary"><input type="text" class="textinput textInput form-control" name="to" placeholder="to:"></div>
+                     </div>
+                     </div>
+                 </div>
+               </div>
+               <div class="row">
+                  <div class="card sticky">
+                     <div class="card-body">
+                        <h5 class="card-title">Summarize</h5>
+                        <div class="row align-items-center justify-content-between">
+                           {% csrf_token %} 
+                           <div class="col-5 px-0 ms-2  border text-center rounded border-primary" ><input type="date" style="height: 40px;" class="form-control" name="today" value="" min="2020-01-01" max="" /></div>
+                           <div id="day_sum" class="col-6 border text-center rounded border-primary" style="height: 40px; padding-top: 9px;">$ {{sum_day}}</div>
+                        </div>
+                        <div class="row align-items-center pt-3 justify-content-between">
+                           <div class="col-5 px-0 ms-2 border text-center rounded border-primary"><input type='month' style="height: 40px;" class="form-control" name="month" value="2022-11" min="2010-01" max="" /></div>
+                           <div id="month_sum" class="col-6 border text-center rounded border-primary" style="height: 40px; padding-top: 9px;">$ {{sum_month}}</div>
+                        </div>
+                     </div>
+                 </div>
+               </div>
+            </div>
+         </div>
+      </main>
+{% endblock %}
